@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frutífera do Brejo — FrutiferaAppJs</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .hero-carousel .carousel-item{
+      height: min(66vh, 560px);
+      min-height: 380px;
+      background: #0f172a;
+    }
+    .hero-carousel .carousel-item img{
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      filter: brightness(.72) saturate(1.05);
+    }
+    .carousel-caption{
+      text-align: left;
+      left: 7%;
+      right: 7%;
+      bottom: 14%;
+    }
+    .glass{
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(7px);
+      border-radius: 18px;
+      padding: 18px 18px;
+      max-width: 860px;
+    }
+    .icon-badge{
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      color: #fff;
+      font-size: .85rem;
+      margin-right: .45rem;
+      margin-bottom: .45rem;
+    }
+    .card-lift{
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+    .card-lift:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 16px 28px rgba(0,0,0,.14);
+    }
+    .section-title{
+      letter-spacing: .2px;
+    }
+    .soft-bg{
+      background: linear-gradient(135deg, rgba(34,197,94,.08), rgba(234,179,8,.06));
+    }
+  </style>
+
+  <style>
+    html[data-theme="dark"]{ color-scheme: dark; }
+    html[data-theme="dark"] body{ background:#0b1220; color:#e7eaf0; }
+    html[data-theme="dark"] .navbar{ background:#0f1a2e !important; }
+    html[data-theme="dark"] .card, html[data-theme="dark"] .border,
+    html[data-theme="dark"] .bg-white{
+      background:#0f1a2e !important;
+      color:#e7eaf0 !important;
+      border-color: rgba(255,255,255,.12) !important;
+    }
+    html[data-theme="dark"] .text-muted{ color: rgba(231,234,240,.72) !important; }
+    html[data-theme="dark"] .soft-bg{ background: linear-gradient(135deg, rgba(34,197,94,.14), rgba(234,179,8,.08)) !important; }
+    html[data-theme="dark"] .btn-light{ background:#13213a; border-color: rgba(255,255,255,.12); color:#e7eaf0; }
+    html[data-theme="dark"] .btn-light:hover{ background:#172a46; }
+  </style>
+
+</head>
+
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2909/2909761.png" type="image/png">
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">🍃 Frutífera do Brejo</a>
+      <div class="d-flex gap-2 align-items-center">
+        <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button">🌙 Modo escuro</button>
+        <a class="btn btn-light btn-sm" href="frutiferas.html">Gestão do Pomar</a>
+      </div>
+    </div>
+  </nav>
+  <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+    </div>
+
+    <div class="carousel-inner">
+
+      <div class="carousel-item active">
+        <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=1600&q=80" alt="Pomar">
+        <div class="carousel-caption">
+          <div class="glass">
+            <div class="mb-2">
+              <span class="icon-badge">🌱 Plantio</span>
+              <span class="icon-badge">📦 Produção</span>
+              <span class="icon-badge">🗓️ Safras</span>
+            </div>
+            <h1 class="h2 fw-bold mb-2">Frutas cultivadas com cuidado no Brejo Paraibano</h1>
+            <p class="mb-0">Acompanhe as fruteiras da propriedade: espécie, produção média e data de plantio — de forma organizada.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=1600&q=80" alt="Mangas">
+        <div class="carousel-caption">
+          <div class="glass">
+            <div class="mb-2">
+              <span class="icon-badge">🥭 Manga</span>
+              <span class="icon-badge">🍊 Cítricos</span>
+              <span class="icon-badge">🍒 Acerola</span>
+            </div>
+            <h2 class="h3 fw-bold mb-2">Diversidade de espécies</h2>
+            <p class="mb-0">Do plantio ao cuidado diário — cada fruteira registrada com suas informações principais.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1600&q=80" alt="Folhas e natureza">
+        <div class="carousel-caption">
+          <div class="glass">
+            <div class="mb-2">
+              <span class="icon-badge">🌧️ Clima</span>
+              <span class="icon-badge">☀️ Sol</span>
+              <span class="icon-badge">💧 Irrigação</span>
+            </div>
+            <h2 class="h3 fw-bold mb-2">Cuidado o ano inteiro</h2>
+            <p class="mb-0">Uma visão simples para manter o pomar sempre bem controlado e pronto para a próxima safra.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Próximo</span>
+    </button>
+  </div>
+
+
+  <section class="py-5 soft-bg">
+    <div class="container">
+      <div class="d-flex align-items-end justify-content-between flex-wrap gap-2 mb-3">
+        <div>
+          <h2 class="h4 fw-bold section-title mb-1">Sobre a propriedade</h2>
+          <div class="text-muted">Produção familiar e controle simples do pomar.</div>
+        </div>
+        <a class="btn btn-success" href="frutiferas.html">🌿 Ir para Gestão do Pomar</a>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card card-lift h-100 shadow-sm">
+            <div class="card-body">
+              <div class="display-6">🌿</div>
+              <h3 class="h5 fw-bold mt-2">Cadastro de fruteiras</h3>
+              <p class="text-muted mb-0">Registre espécie (popular), nome científico, produção média por safra e data do plantio.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card card-lift h-100 shadow-sm">
+            <div class="card-body">
+              <div class="display-6">🗓️</div>
+              <h3 class="h5 fw-bold mt-2">Idade em meses</h3>
+              <p class="text-muted mb-0">A tela de gestão calcula automaticamente a idade da fruteira em meses.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card card-lift h-100 shadow-sm">
+            <div class="card-body">
+              <div class="display-6">🧺</div>
+              <h3 class="h5 fw-bold mt-2">Listagem em cartões</h3>
+              <p class="text-muted mb-0">Visual rápido e agradável para conferir as informações principais da propriedade.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-5">
+
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <div class="p-4 bg-white border rounded-4 shadow-sm h-100">
+            <h3 class="h5 fw-bold mb-2">Destaques do pomar</h3>
+            <p class="text-muted mb-3">Algumas espécies comuns na região (exemplos):</p>
+            <div class="row g-3">
+              <div class="col-6 col-md-4">
+                <div class="border rounded-4 p-3 text-center h-100">
+                  <div class="display-6">🥭</div>
+                  <div class="fw-semibold">Manga</div>
+                  <div class="text-muted small">Safras variadas</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="border rounded-4 p-3 text-center h-100">
+                  <div class="display-6">🍒</div>
+                  <div class="fw-semibold">Acerola</div>
+                  <div class="text-muted small">Alta vitamina C</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="border rounded-4 p-3 text-center h-100">
+                  <div class="display-6">🥑</div>
+                  <div class="fw-semibold">Abacate</div>
+                  <div class="text-muted small">Boa produtividade</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="border rounded-4 p-3 text-center h-100">
+                  <div class="display-6">🍊</div>
+                  <div class="fw-semibold">Caju</div>
+                  <div class="text-muted small">Sazonal</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="border rounded-4 p-3 text-center h-100">
+                  <div class="display-6">🍋</div>
+                  <div class="fw-semibold">Limão</div>
+                  <div class="text-muted small">Versátil</div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="border rounded-4 p-3 text-center h-100">
+                  <div class="display-6">🍈</div>
+                  <div class="fw-semibold">Goiaba</div>
+                  <div class="text-muted small">Tradicional</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="p-4 bg-white border rounded-4 shadow-sm h-100">
+            <h3 class="h5 fw-bold mb-2">Como usar</h3>
+            <ol class="text-muted mb-3">
+              <li>Abra a <strong>Gestão do Pomar</strong>.</li>
+              <li>Clique em <strong>+</strong> para cadastrar uma fruteira.</li>
+              <li>Use a pesquisa para localizar por espécie ou ID.</li>
+            </ol>
+            <a class="btn btn-success w-100" href="frutiferas.html">Abrir Gestão do Pomar</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="bg-dark text-white-50 py-3">
+    <div class="container d-flex flex-wrap justify-content-between gap-2">
+      <div class="text-white fw-semibold">🍃 Frutífera do Brejo</div>
+      <div class="small">Brejo Paraibano • 2026</div>
+    </div>
+  </footer>
+
+
+<script>
+  (function(){
+    function syncButton(){
+      const theme = document.documentElement.getAttribute("data-theme") || "light";
+      const btn = document.getElementById("themeToggle");
+      if(btn) btn.textContent = theme === "dark" ? "☀️ Modo claro" : "🌙 Modo escuro";
+    }
+
+    function init(){
+      const saved = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", saved);
+      syncButton();
+
+      const btn = document.getElementById("themeToggle");
+      if(btn){
+        btn.addEventListener("click", function(){
+          const current = document.documentElement.getAttribute("data-theme") || "light";
+          const next = current === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", next);
+          localStorage.setItem("theme", next);
+          syncButton();
+        });
+      }
+    }
+
+    if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+  })();
+</script>
+
+</body>
+</html>

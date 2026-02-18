@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão do Pomar — FrutiferaAppJs</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .toolbar{
+      background: linear-gradient(135deg, rgba(34,197,94,.10), rgba(234,179,8,.07));
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .card-lift{
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+    .card-lift:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 16px 28px rgba(0,0,0,.14);
+    }
+    .mono{
+      font-variant-numeric: tabular-nums;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    }
+  </style>
+
+  <style>
+    html[data-theme="dark"]{ color-scheme: dark; }
+    html[data-theme="dark"] body{ background:#0b1220 !important; color:#e7eaf0 !important; }
+    html[data-theme="dark"] .navbar{ background:#0f1a2e !important; }
+    html[data-theme="dark"] .toolbar{ border-color: rgba(255,255,255,.12) !important; }
+    html[data-theme="dark"] .card, html[data-theme="dark"] .modal-content,
+    html[data-theme="dark"] .input-group-text, html[data-theme="dark"] .form-control,
+    html[data-theme="dark"] .bg-white{
+      background:#0f1a2e !important;
+      color:#e7eaf0 !important;
+      border-color: rgba(255,255,255,.12) !important;
+    }
+    html[data-theme="dark"] .text-muted{ color: rgba(231,234,240,.72) !important; }
+    html[data-theme="dark"] .form-control::placeholder{ color: rgba(231,234,240,.55) !important; }
+  </style>
+</head>
+
+
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2909/2909761.png" type="image/png">
+<body class="bg-light">
+
+  <nav class="navbar navbar-dark bg-success sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">⬅ Início</a>
+      <span class="navbar-text text-white fw-bold">Gestão do Pomar</span>
+      <button id="themeToggle" class="btn btn-outline-light btn-sm">🌙 Modo escuro</button>
+    </div>
+  </nav>
+
+  <div class="toolbar py-3">
+    <div class="container">
+      <div class="row g-2 align-items-center">
+        <div class="col-12 col-lg-6">
+          <h1 class="h4 fw-bold mb-1">Fruteiras cadastradas</h1>
+          <div class="text-muted">Cadastre e acompanhe as fruteiras da propriedade.</div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="d-flex gap-2 justify-content-lg-end flex-wrap">
+            <div class="input-group" style="max-width: 420px;">
+              <span class="input-group-text">🔎</span>
+              <input id="inputPesquisa" class="form-control" type="text" placeholder="Pesquisar por ID, nome popular ou científico">
+              <button id="btnPesquisar" class="btn btn-primary" type="button">Pesquisar</button>
+            </div>
+            <button id="btnAdicionar" class="btn btn-success" type="button">Adicionar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="container my-4">
+    <div id="cardsContainer" class="row g-3"></div>
+  </main>
+
+  <!-- Modal cadastro/edição -->
+  <div class="modal fade" id="modalFrutifera" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitulo">Cadastrar fruteira</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" id="idFrutifera">
+
+          <div class="mb-3">
+            <label class="form-label">Nome da espécie (popular)</label>
+            <input id="nomePopular" class="form-control" type="text" placeholder="Ex.: Manga, Acerola, Caju">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Nome científico</label>
+            <input id="nomeCientifico" class="form-control" type="text" placeholder="Ex.: Mangifera indica">
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Produção média por safra (Kg)</label>
+              <input id="producao" class="form-control" type="number" min="0" step="0.1" placeholder="Ex.: 120">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Data do plantio</label>
+              <input id="dataPlantio" class="form-control" type="date">
+              <div class="form-text">Exibição em dd/mm/aaaa na listagem.</div>
+            </div>
+          </div>
+
+          <div class="mt-3 small text-muted">
+            Identificador gerado automaticamente e único no cadastro.
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button id="btnSalvar" class="btn btn-primary" type="button">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="src/frutiferas.js"></script>
+
+<script>
+  (function(){
+    function syncButton(){
+      const theme = document.documentElement.getAttribute("data-theme") || "light";
+      const btn = document.getElementById("themeToggle");
+      if(btn) btn.textContent = theme === "dark" ? "☀️ Modo claro" : "🌙 Modo escuro";
+    }
+
+    function init(){
+      const saved = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", saved);
+      syncButton();
+
+      const btn = document.getElementById("themeToggle");
+      if(btn){
+        btn.addEventListener("click", function(){
+          const current = document.documentElement.getAttribute("data-theme") || "light";
+          const next = current === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", next);
+          localStorage.setItem("theme", next);
+          syncButton();
+        });
+      }
+    }
+
+    if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+  })();
+</script>
+
+</body>
+</html>

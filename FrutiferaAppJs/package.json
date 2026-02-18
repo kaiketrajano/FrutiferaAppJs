@@ -1,0 +1,8 @@
+{
+  "name": "frutiferaappjs",
+  "version": "1.0.0",
+  "description": "Aplicação web (HTML, CSS, JS) para cadastro e listagem de frutíferas com LocalStorage.",
+  "scripts": {
+    "dev": "npx serve ."
+  }
+}
