@@ -30,7 +30,7 @@
     return `${pad2(dt.getDate())}/${pad2(dt.getMonth() + 1)}/${dt.getFullYear()}`;
   }
 
-  // idade em meses (diferença entre datas)
+  
   function idadeEmMeses(isoPlantio) {
     const plantio = parseDateISO(isoPlantio);
     if (!plantio) return 0;
@@ -38,7 +38,6 @@
     const hoje = new Date();
     let meses = (hoje.getFullYear() - plantio.getFullYear()) * 12 + (hoje.getMonth() - plantio.getMonth());
 
-    // se ainda não completou o mês (dia do mês menor), desconta 1
     if (hoje.getDate() < plantio.getDate()) meses -= 1;
 
     return Math.max(0, meses);
@@ -74,7 +73,6 @@
     editId = null;
     clearForm();
 
-    // id numérico e único gerado automaticamente
     $("idFrutifera").value = String(Date.now());
 
     openModal("Cadastrar fruteira");
@@ -134,7 +132,6 @@
 
     const list = load();
 
-    // ID único (Date.now) — checagem de duplicidade por segurança
     const duplicado = list.some((x) => x.id === id && x.id !== editId);
     if (duplicado) {
       alert("Já existe uma fruteira com esse identificador. Tente novamente.");
@@ -177,7 +174,7 @@
 
     const list = load()
       .slice()
-      .sort((a, b) => b.id - a.id) // mais recente primeiro
+      .sort((a, b) => b.id - a.id) 
       .filter((x) => {
         if (!q) return true;
         return (
