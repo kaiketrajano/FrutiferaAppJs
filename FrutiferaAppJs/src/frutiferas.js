@@ -1,21 +1,20 @@
 // Eu coloquei tudo dentro de uma função que já roda sozinha
-// porque eu não queria deixar variável “solta” no global e depois dar conflito.
+// porque eu não queria deixar variável “solta” no global e depois dar conflito
 (function () {
 
-  // Essa é a chave que eu uso pra salvar e buscar as fruteiras no LocalStorage.
-  // Deixei como const porque isso não tem motivo pra mudar.
+  // Essa é a chave que eu uso pra salvar e buscar as fruteiras no LocalStorage
+  // Deixei como const porque isso não tem motivo pra mudar
   const STORAGE_KEY = "frutiferas";
 
-  // Aqui eu guardo o ID da fruteira quando eu entro em modo de edição
-  // (quando eu clico em editar um card).
+  // Aqui eu guardo o ID da fruteira quando eu entro em modo de edição(quando eu clico em editar um card)
   let editId = null;
 
-  // Atalho pra pegar elementos do HTML pelo id (pra não repetir getElementById o tempo todo).
-  // Assim evito repetir document.getElementById várias vezes.
+  // Atalho pra pegar elementos do HTML pelo id (pra não repetir getElementById o tempo todo)
+  // Assim evito repetir document.getElementById várias vezes
   const $ = (id) => document.getElementById(id);
 
-  // Essa função lê o LocalStorage e devolve a lista de fruteiras.
-  // Se não houver nada salvo ainda, retorna um array vazio.
+  // Essa função lê o LocalStorage e devolve a lista de fruteira
+  // Se não houver nada salvo ainda, retorna um array vazio
   function load() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY); // tenta pegar os dados salvos
@@ -26,17 +25,17 @@
     }
   }
 
-  // Essa função salva a lista atual no LocalStorage.
+  // Essa função salva a lista atual no LocalStorage
   function save(list) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   }
 
-  // Só pra formatar número com 2 dígitos (tipo 5 virar 05).
+  // Só pra formatar número com 2 dígitos (tipo 5 vira 05)
   function pad2(n) {
     return String(n).padStart(2, "0");
   }
 
-  // Eu guardo a data como yyyy-mm-dd (por causa do input date), mas mostro como dd/mm/aaaa.
+  // Eu guardo a data como yyyy-mm-dd (por causa do input date), mas mostro como dd/mm/aaaa
   function formatBRFromISO(iso) {
     if (!iso) return "";
     const [y, m, d] = iso.split("-").map(Number);
@@ -45,24 +44,24 @@
     return `${pad2(dt.getDate())}/${pad2(dt.getMonth() + 1)}/${dt.getFullYear()}`;
   }
 
-  // Aqui eu calculo a idade em meses (requisito do professor).
+  // Aqui eu calculo a idade em meses 
   function idadeEmMeses(isoPlantio) {
     const plantio = parseDateISO(isoPlantio);
     if (!plantio) return 0;
 
     const hoje = new Date();
 
-    // Calcula diferença básica de meses entre as datas.
+    // Calcula diferença básica de meses entre as datas
     let meses = (hoje.getFullYear() - plantio.getFullYear()) * 12 + 
                 (hoje.getMonth() - plantio.getMonth());
 
-    // Se ainda não completou o mês atual, desconta 1.
+    // Se ainda não completou o mês atual, desconta 1
     if (hoje.getDate() < plantio.getDate()) meses -= 1;
 
     return Math.max(0, meses);
   }
 
-  // Valida se a data tá no formato certo e transforma em Date pra eu conseguir calcular.
+  // Valida se a data tá no formato certo e transforma em Date pra eu conseguir calcular
   function parseDateISO(iso) {
     if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return null;
     const [y, m, d] = iso.split("-").map(Number);
@@ -70,20 +69,20 @@
     return Number.isNaN(dt.getTime()) ? null : dt;
   }
 
-  // Abre o modal do Bootstrap e troca o título (Cadastrar/Editar).
+  // Abre o modal do Bootstrap e troca o título (Cadastrar/Editar)
   function openModal(title) {
     $("modalTitulo").textContent = title;
     const el = $("modalFrutifera");
     bootstrap.Modal.getOrCreateInstance(el).show();
   }
 
-  // Fecha o modal quando termina.
+  // Fecha o modal quando termina
   function closeModal() {
     const el = $("modalFrutifera");
     bootstrap.Modal.getOrCreateInstance(el).hide();
   }
 
-  // Limpo o formulário pra não ficar com dados antigos quando for cadastrar de novo.
+  // Limpa o formulário pra não ficar com dados antigos quando for cadastrar de novo
   function clearForm() {
     $("idFrutifera").value = "";
     $("nomePopular").value = "";
@@ -92,19 +91,19 @@
     $("dataPlantio").value = "";
   }
 
-  // Quando eu clico em Adicionar, eu preparo tudo pra um cadastro novo.
+  // Quando eu clico em Adicionar, eu preparo tudo pra um cadastro novo
   function abrirCadastro() {
     editId = null; // garante que estamos criando um novo registro
     clearForm();
 
     // Gera ID numérico único com Date.now()
-    // (eu usei isso porque o professor pediu e é bem simples, não repete fácil)
+
     $("idFrutifera").value = String(Date.now());
 
     openModal("Cadastrar fruteira");
   }
 
-  // Quando eu clico em Editar, eu abro o modal já preenchido.
+  // Quando eu clico em Editar, eu abro o modal já preenchido
   function abrirEdicao(id) {
     const list = load();
     const item = list.find((x) => x.id === id);
@@ -120,7 +119,7 @@
     openModal("Editar fruteira");
   }
 
-  // Exclui uma fruteira (com confirmação pra não apagar sem querer).
+  // Exclui uma fruteira (com confirmação pra não apagar sem querer)
   function excluir(id) {
     const list = load();
     const item = list.find((x) => x.id === id);
@@ -134,7 +133,7 @@
     render($("inputPesquisa").value);
   }
 
-  // Essa é a função principal: salva um novo cadastro ou atualiza se estiver editando.
+  // Salva um novo cadastro ou atualiza se estiver editando
   function salvar() {
     const id = Number(($("idFrutifera").value || "").trim());
     const nomePopular = ($("nomePopular").value || "").trim();
@@ -142,7 +141,7 @@
     const producao = Number(($("producao").value || "").trim());
     const dataPlantio = ($("dataPlantio").value || "").trim();
 
-    // Validações básicas (se faltar algo eu aviso).
+    // Validações básicas 
     if (!id || !Number.isFinite(id)) {
       alert("Identificador inválido.");
       return;
@@ -179,11 +178,11 @@
 
     save(next);
     closeModal();
-    // Depois de salvar, eu só mando renderizar de novo pra atualizar a lista na hora.
+    // Depois de salvar, eu só mando renderizar de novo pra atualizar a lista na hora
     render($("inputPesquisa").value);
   }
 
-  // Isso aqui é só pra evitar o usuário quebrar o layout digitando tags HTML no input.
+  // Isso aqui é só pra evitar o usuário quebrar o layout digitando tags HTML no input
   function escapeHtml(str) {
     return String(str)
       .replaceAll("&", "&amp;")
@@ -193,7 +192,7 @@
       .replaceAll("'", "&#039;");
   }
 
-  // Monta os cards na tela usando Bootstrap (requisito de listar em cards).
+  // Monta os cards na tela usando Bootstrap
   function render(query) {
     const q = (query || "").trim().toLowerCase();
     const container = $("cardsContainer");
@@ -252,7 +251,7 @@
     });
   }
 
-  // Ligo os botões e eventos da tela (Adicionar, Salvar, Pesquisar, etc.).
+  // Ligo os botões e eventos da tela (Adicionar, Salvar, Pesquisar, etc.)
   function wire() {
     $("btnAdicionar").addEventListener("click", abrirCadastro);
     $("btnSalvar").addEventListener("click", salvar);
@@ -282,4 +281,4 @@
     start();
   }
 
-})(); // fim da função autoexecutável
+})();
